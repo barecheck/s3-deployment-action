@@ -29878,6 +29878,7 @@ const { info } = __webpack_require__(4528);
 
 const createBucket = async (bucketName) => {
   info('S3 bucket does not exist. Creating...');
+  info(process.env);
   await s3Client.createBucket({ Bucket: bucketName }).promise();
 
   info('Configuring bucket website...');
