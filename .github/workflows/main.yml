@@ -1,4 +1,4 @@
-name: Code Coverage
+name: Preview Deployment
 
 on: [pull_request]
 
