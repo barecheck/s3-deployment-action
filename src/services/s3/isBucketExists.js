@@ -1,4 +1,4 @@
-import s3Client from './s3Client';
+const s3Client = require('./s3Client');
 
 const isBucketExists = async (bucketName) => {
   try {
