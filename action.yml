@@ -7,7 +7,9 @@ inputs:
   source-dir:
     description: Directory that would be deployed to S3 bucket
     required: true
-
+  s3-bucket-prefix:
+    description: Prefix for all S3 buckets that would be created for preview deployments
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
