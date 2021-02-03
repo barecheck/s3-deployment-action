@@ -4,7 +4,7 @@ branding:
   icon: 'upload-cloud'
   color: 'yellow'
 inputs:
-  sourceDir:
+  source-dir:
     description: Directory that would be deployed to S3 bucket
     required: true
 
