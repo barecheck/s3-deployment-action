@@ -29801,7 +29801,7 @@ const deployToS3Bucket = async () => {
 
   const bucketExists = await isBucketExists(s3BucketName);
 
-  if (bucketExists) await createBucket(s3BucketName);
+  if (!bucketExists) await createBucket(s3BucketName);
 
   await uploadFiles(s3BucketName, sourceDir);
 };
