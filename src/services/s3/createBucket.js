@@ -3,6 +3,7 @@ const { info } = require('../../logger');
 
 const createBucket = async (bucketName) => {
   info('S3 bucket does not exist. Creating...');
+
   await s3Client.createBucket({ Bucket: bucketName }).promise();
 
   info('Configuring bucket website...');
