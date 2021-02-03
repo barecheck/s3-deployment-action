@@ -29817,13 +29817,12 @@ const { pullRequestPayload } = __webpack_require__(892);
 const deployToS3Bucket = __webpack_require__(3285);
 
 async function main() {
-  console.log(github.context);
   // validators
   envVariables();
   pullRequestPayload();
 
   // TODO: define remove deployment action
-  deployToS3Bucket();
+  await deployToS3Bucket();
 }
 
 main();
