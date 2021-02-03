@@ -29792,12 +29792,16 @@ function wrappy (fn, cb) {
 
 const createBucket = __webpack_require__(5583);
 const uploadFiles = __webpack_require__(6087);
+const isBucketExists = __webpack_require__(5447);
 const { getSourceDir, getS3BucketName } = __webpack_require__(6);
 
 const deployToS3Bucket = async () => {
   const sourceDir = getSourceDir();
   const s3BucketName = getS3BucketName();
-  await createBucket(s3BucketName);
+
+  const bucketExists = await isBucketExists(s3BucketName);
+
+  if (bucketExists) await createBucket(s3BucketName);
 
   await uploadFiles(s3BucketName, sourceDir);
 };
@@ -29844,8 +29848,10 @@ const getSourceDir = () => core.getInput('source-dir');
 const getRepositoryName = () => context.repo;
 
 const getBranchName = () => context.payload.pull_request.head.ref;
+const getPullRequestNumber = () => context.payload.pull_request.number;
 
-const getS3BucketName = () => `${getS3BucketPrefix() - getBranchName()}`;
+const getS3BucketName = () =>
+  `${getS3BucketPrefix()}-${getPullRequestNumber()}`;
 
 module.exports = {
   getS3BucketPrefix,
@@ -29878,7 +29884,7 @@ const { info } = __webpack_require__(4528);
 
 const createBucket = async (bucketName) => {
   info('S3 bucket does not exist. Creating...');
-  info(process.env);
+
   await s3Client.createBucket({ Bucket: bucketName }).promise();
 
   info('Configuring bucket website...');
@@ -29899,10 +29905,34 @@ module.exports = createBucket;
 
 /***/ }),
 
+/***/ 5447:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _s3Client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2402);
+/* harmony import */ var _s3Client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_s3Client__WEBPACK_IMPORTED_MODULE_0__);
+/* module decorator */ module = __webpack_require__.hmd(module);
+
+
+const isBucketExists = async (bucketName) => {
+  try {
+    await _s3Client__WEBPACK_IMPORTED_MODULE_0___default().headBucket({ Bucket: bucketName }).promise();
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+module.exports = isBucketExists;
+
+
+/***/ }),
+
 /***/ 8412:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const { readFile } = __webpack_require__(5747);
+const { readFileSync } = __webpack_require__(5747);
 const mimeTypes = __webpack_require__(3583);
 
 const s3Client = __webpack_require__(2402);
@@ -29910,7 +29940,7 @@ const { info } = __webpack_require__(4528);
 
 const putObject = async (bucketName, s3Key, filePath) => {
   try {
-    const fileBuffer = await readFile(filePath);
+    const fileBuffer = readFileSync(filePath);
     const mimeType = mimeTypes.lookup(filePath) || 'application/octet-stream';
 
     const res = await s3Client
@@ -29927,7 +29957,7 @@ const putObject = async (bucketName, s3Key, filePath) => {
   } catch (e) {
     const message = `Failed to upload ${s3Key}: ${e.code} - ${e.message}`;
     info(message);
-    throw new Error(message);
+    throw new Error(e);
   }
 };
 
@@ -29949,13 +29979,8 @@ module.exports = s3Client;
 /***/ }),
 
 /***/ 6087:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
 const path = __webpack_require__(5622);
 const readdir = __webpack_require__(6715);
 
@@ -29963,7 +29988,7 @@ const filePathToS3Key = __webpack_require__(2408);
 const { info } = __webpack_require__(4528);
 const putObject = __webpack_require__(8412);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (async (bucketName, directory) => {
+const uploadFiles = async (bucketName, directory) => {
   const normalizedPath = path.normalize(directory);
 
   const files = await readdir(normalizedPath);
@@ -29974,19 +29999,15 @@ const putObject = __webpack_require__(8412);
 
       info(`Uploading ${s3Key} to ${bucketName}`);
 
-      try {
-        const object = putObject(bucketName, s3Key, filePath);
-        return object;
-      } catch (e) {
-        const message = `Failed to upload ${s3Key}: ${e.code} - ${e.message}`;
-        info(message);
-        throw new Error(message);
-      }
+      const object = await putObject(bucketName, s3Key, filePath);
+      return object;
     })
   );
 
   return uploadedObjects;
-});
+};
+
+module.exports = uploadFiles;
 
 
 /***/ }),
@@ -30312,8 +30333,8 @@ module.exports = require("zlib");;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
@@ -30326,11 +30347,26 @@ module.exports = require("zlib");;
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
 /******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => module['default'] :
+/******/ 				() => module;
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -30340,6 +30376,21 @@ module.exports = require("zlib");;
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/harmony module decorator */
+/******/ 	(() => {
+/******/ 		__webpack_require__.hmd = (module) => {
+/******/ 			module = Object.create(module);
+/******/ 			if (!module.children) module.children = [];
+/******/ 			Object.defineProperty(module, 'exports', {
+/******/ 				enumerable: true,
+/******/ 				set: () => {
+/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
+/******/ 				}
+/******/ 			});
+/******/ 			return module;
 /******/ 		};
 /******/ 	})();
 /******/ 	

@@ -5,7 +5,7 @@ const filePathToS3Key = require('../../utils/filePathToS3Key');
 const { info } = require('../../logger');
 const putObject = require('./putObject');
 
-export default async (bucketName, directory) => {
+const uploadFiles = async (bucketName, directory) => {
   const normalizedPath = path.normalize(directory);
 
   const files = await readdir(normalizedPath);
@@ -16,16 +16,12 @@ export default async (bucketName, directory) => {
 
       info(`Uploading ${s3Key} to ${bucketName}`);
 
-      try {
-        const object = putObject(bucketName, s3Key, filePath);
-        return object;
-      } catch (e) {
-        const message = `Failed to upload ${s3Key}: ${e.code} - ${e.message}`;
-        info(message);
-        throw new Error(message);
-      }
+      const object = await putObject(bucketName, s3Key, filePath);
+      return object;
     })
   );
 
   return uploadedObjects;
 };
+
+module.exports = uploadFiles;

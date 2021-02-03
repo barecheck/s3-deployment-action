@@ -17,7 +17,7 @@ jobs:
         uses: ./
         with:
           source-dir: ./example
-          s3-bucket-prefix: br-s3
+          s3-bucket-prefix: barecheck
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -1,4 +1,4 @@
-const { readFile } = require('fs');
+const { readFileSync } = require('fs');
 const mimeTypes = require('mime-types');
 
 const s3Client = require('./s3Client');
@@ -6,7 +6,7 @@ const { info } = require('../../logger');
 
 const putObject = async (bucketName, s3Key, filePath) => {
   try {
-    const fileBuffer = await readFile(filePath);
+    const fileBuffer = readFileSync(filePath);
     const mimeType = mimeTypes.lookup(filePath) || 'application/octet-stream';
 
     const res = await s3Client
@@ -23,7 +23,7 @@ const putObject = async (bucketName, s3Key, filePath) => {
   } catch (e) {
     const message = `Failed to upload ${s3Key}: ${e.code} - ${e.message}`;
     info(message);
-    throw new Error(message);
+    throw new Error(e);
   }
 };
 
