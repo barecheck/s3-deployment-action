@@ -1,0 +1,49 @@
+{
+  "name": "s3-preview-deployment-action",
+  "version": "0.1.0",
+  "description": "Github Action to create preview deployment on AWS S3 to view your changes",
+  "main": "src/index.js",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.26.1",
+    "chai": "^4.2.0",
+    "eslint": "^7.16.0",
+    "eslint-plugin-import": "^2.22.1",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.2.1",
+    "proxyquire": "^2.1.3",
+    "sinon": "^9.2.2"
+  },
+  "scripts": {
+    "build": "ncc build src/index.js --license licenses.txt",
+    "lint": "eslint --max-warnings=0 src",
+    "format": "prettier --write src",
+    "test": "mocha --recursive tests",
+    "coverage": "nyc yarn test",
+    "format-check": "prettier --check src",
+    "check-all": "yarn format-check && yarn lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barecheck/s3-preview-deployment-action.git"
+  },
+  "keywords": [
+    "s3",
+    "aws",
+    "github",
+    "github actions",
+    "CI",
+    "CD",
+    "deployment"
+  ],
+  "author": "Barecheck",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/barecheck/s3-preview-deployment-action/issues"
+  },
+  "homepage": "https://github.com/barecheck/s3-preview-deployment-action#readme"
+}

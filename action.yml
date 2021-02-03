@@ -1,0 +1,13 @@
+name: 'AWS S3 Preview Deployment'
+description: 'GitHub Action generates code coverage reports'
+branding:
+  icon: 'upload-cloud'
+  color: 'yellow'
+inputs:
+  sourceDir:
+    description: Directory that would be deployed to S3 bucket
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
