@@ -29834,7 +29834,7 @@ main();
 /***/ 6:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const { context } = '@actions/github';
+const { context } = __webpack_require__(5438);
 const core = __webpack_require__(2186);
 
 const getS3BucketPrefix = () => core.getInput('s3-bucket-prefix');
