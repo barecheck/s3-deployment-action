@@ -1,4 +1,4 @@
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 const { assert } = require('chai');
 const sinon = require('sinon');
 
