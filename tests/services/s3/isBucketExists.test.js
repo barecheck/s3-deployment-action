@@ -31,4 +31,25 @@ describe('services/s3/isBucketExists', () => {
       }
     ]);
   });
+
+  it('should return false if there is no bucket', async () => {
+    const bucketName = 'test';
+    const promise = sinon.stub().throws(new Error('bucket is not exist'));
+    const s3Client = {
+      headBucket: sinon.stub().returns({ promise })
+    };
+
+    const isBucketExists = isBucketExistsMock({ s3Client });
+
+    const res = await isBucketExists(bucketName);
+
+    assert.isFalse(res);
+    assert.isTrue(s3Client.headBucket.calledOnce);
+
+    assert.deepEqual(s3Client.headBucket.firstCall.args, [
+      {
+        Bucket: bucketName
+      }
+    ]);
+  });
 });
