@@ -10,10 +10,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.base_ref }}
-      - name: Use Node.js 12.13.1
+      - name: Use Node.js 14.15.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.13.1
+          node-version: 14.15.0
       - name: Cache node modules
         uses: actions/cache@v1
         with:
@@ -39,10 +39,10 @@ jobs:
     needs: base_coverage
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 12.13.1
+      - name: Use Node.js 14.15.0
         uses: actions/setup-node@v1
         with:
-          node-version: 12.13.1
+          node-version: 14.15.0
       - name: Cache node modules
         uses: actions/cache@v1
         with:
