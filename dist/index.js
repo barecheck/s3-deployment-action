@@ -30006,8 +30006,11 @@ module.exports = deleteFiles;
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const s3Client = __webpack_require__(2402);
+const { info } = __webpack_require__(4528);
 
 const isBucketExists = async (bucketName) => {
+  info(`Checking if bucket ${bucketName} exists...`);
+
   try {
     await s3Client.headBucket({ Bucket: bucketName }).promise();
     return true;
