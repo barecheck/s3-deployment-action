@@ -13,10 +13,13 @@ const getPullRequestNumber = () => context.payload.pull_request.number;
 const getS3BucketName = () =>
   `${getS3BucketPrefix()}-${getPullRequestNumber()}`;
 
+const getGithubActionType = () => context.payload.action;
+
 module.exports = {
   getS3BucketPrefix,
   getSourceDir,
   getRepositoryName,
   getBranchName,
-  getS3BucketName
+  getS3BucketName,
+  getGithubActionType
 };
