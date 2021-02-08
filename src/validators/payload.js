@@ -2,10 +2,12 @@ const github = require('@actions/github');
 
 const pullRequestPayload = () => {
   if (!github.context.payload.pull_request) {
-    throw new Error('Action can be triggered only by Pull requests');
+    throw new Error('Action can be triggered only in Pull requests');
   }
 
-  return true;
+  if (github.context.eventName !== 'pull_request') {
+    throw new Error('Action can be triggered only in Pull requests');
+  }
 };
 
 module.exports = { pullRequestPayload };

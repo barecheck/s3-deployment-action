@@ -29811,13 +29811,39 @@ module.exports = deployToS3Bucket;
 
 /***/ }),
 
+/***/ 4047:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const isBucketExists = __webpack_require__(5447);
+const deleteBucket = __webpack_require__(5351);
+const deleteFiles = __webpack_require__(264);
+const { getS3BucketName } = __webpack_require__(6);
+
+const removeS3Bucket = async () => {
+  const s3BucketName = getS3BucketName();
+
+  const bucketExists = await isBucketExists(s3BucketName);
+
+  if (bucketExists) {
+    await deleteFiles(s3BucketName);
+    await deleteBucket(s3BucketName);
+  }
+};
+
+module.exports = removeS3Bucket;
+
+
+/***/ }),
+
 /***/ 4351:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 const { info } = __webpack_require__(4528);
+const { getGithubActionType } = __webpack_require__(6);
 const envVariables = __webpack_require__(4305);
 const { pullRequestPayload } = __webpack_require__(892);
 const deployToS3Bucket = __webpack_require__(3285);
+const removeS3Bucket = __webpack_require__(4047);
 
 async function main() {
   // validators
@@ -29826,8 +29852,24 @@ async function main() {
   pullRequestPayload();
 
   info('Input values are valid');
-  // TODO: define remove deployment action
-  await deployToS3Bucket();
+
+  const githubActionType = getGithubActionType();
+
+  // TODO: add action based validators
+  switch (githubActionType) {
+    case 'opened':
+    case 'reopened':
+    case 'synchronize':
+      await deployToS3Bucket();
+      break;
+
+    case 'closed':
+      await removeS3Bucket();
+      break;
+
+    default:
+      throw new Error(`${githubActionType} is not implemented...`);
+  }
 }
 
 main();
@@ -29853,12 +29895,15 @@ const getPullRequestNumber = () => context.payload.pull_request.number;
 const getS3BucketName = () =>
   `${getS3BucketPrefix()}-${getPullRequestNumber()}`;
 
+const getGithubActionType = () => context.payload.action;
+
 module.exports = {
   getS3BucketPrefix,
   getSourceDir,
   getRepositoryName,
   getBranchName,
-  getS3BucketName
+  getS3BucketName,
+  getGithubActionType
 };
 
 
@@ -29905,12 +29950,67 @@ module.exports = createBucket;
 
 /***/ }),
 
+/***/ 5351:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const s3Client = __webpack_require__(2402);
+const { info } = __webpack_require__(4528);
+
+const deleteBucket = async (bucketName) => {
+  info(`Deleting ${bucketName} S3 bucket...`);
+  const res = await s3Client.deleteBucket({ Bucket: bucketName }).promise();
+
+  return res;
+};
+
+module.exports = deleteBucket;
+
+
+/***/ }),
+
+/***/ 264:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const s3Client = __webpack_require__(2402);
+const { info } = __webpack_require__(4528);
+
+const deleteFiles = async (bucketName) => {
+  info(`Deleting all files from ${bucketName}`);
+
+  info('Fetching objects...');
+  const objects = await s3Client
+    .listObjectsV2({ Bucket: bucketName })
+    .promise();
+
+  if (objects.Contents && objects.Contents.length >= 1) {
+    const deleteParams = {
+      Bucket: bucketName,
+      Delete: {
+        Objects: objects.Contents.map(({ Key }) => ({
+          Key
+        }))
+      }
+    };
+
+    info('Deleting objects...');
+    await s3Client.deleteObjects(deleteParams).promise();
+  }
+};
+
+module.exports = deleteFiles;
+
+
+/***/ }),
+
 /***/ 5447:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const s3Client = __webpack_require__(2402);
+const { info } = __webpack_require__(4528);
 
 const isBucketExists = async (bucketName) => {
+  info(`Checking if bucket ${bucketName} exists...`);
+
   try {
     await s3Client.headBucket({ Bucket: bucketName }).promise();
     return true;
@@ -30048,10 +30148,12 @@ const github = __webpack_require__(5438);
 
 const pullRequestPayload = () => {
   if (!github.context.payload.pull_request) {
-    throw new Error('Action can be triggered only by Pull requests');
+    throw new Error('Action can be triggered only in Pull requests');
   }
 
-  return true;
+  if (github.context.eventName !== 'pull_request') {
+    throw new Error('Action can be triggered only in Pull requests');
+  }
 };
 
 module.exports = { pullRequestPayload };
