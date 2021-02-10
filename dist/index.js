@@ -29817,11 +29817,11 @@ const deployToS3Bucket = async () => {
   const s3BucketName = getS3BucketName();
   const websiteUrl = getWebsiteUrl();
 
-  const bucketExists = await isBucketExists(s3BucketName);
-
   const deploymentId = await createDeployment();
 
   if (deploymentId) {
+    const bucketExists = await isBucketExists(s3BucketName);
+
     await createDeploymentStatus(deploymentId, deploymentStatus.inProgress);
 
     if (!bucketExists) await createBucket(s3BucketName);
@@ -29917,8 +29917,8 @@ const getS3BucketPrefix = () => core.getInput('s3-bucket-prefix');
 
 const getSourceDir = () => core.getInput('source-dir');
 
-const getRepositoryOwner = () => context.payload.repo.owner;
-const getRepositoryName = () => context.payload.repo.repo;
+const getRepositoryOwner = () => context.repo.owner;
+const getRepositoryName = () => context.repo.repo;
 
 const getBranchName = () => context.payload.pull_request.head.ref;
 const getPullRequestNumber = () => context.payload.pull_request.number;

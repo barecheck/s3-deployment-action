@@ -5,8 +5,8 @@ const getS3BucketPrefix = () => core.getInput('s3-bucket-prefix');
 
 const getSourceDir = () => core.getInput('source-dir');
 
-const getRepositoryOwner = () => context.payload.repo.owner;
-const getRepositoryName = () => context.payload.repo.repo;
+const getRepositoryOwner = () => context.repo.owner;
+const getRepositoryName = () => context.repo.repo;
 
 const getBranchName = () => context.payload.pull_request.head.ref;
 const getPullRequestNumber = () => context.payload.pull_request.number;

@@ -11,11 +11,11 @@ const deployToS3Bucket = async () => {
   const s3BucketName = getS3BucketName();
   const websiteUrl = getWebsiteUrl();
 
-  const bucketExists = await isBucketExists(s3BucketName);
-
   const deploymentId = await createDeployment();
 
   if (deploymentId) {
+    const bucketExists = await isBucketExists(s3BucketName);
+
     await createDeploymentStatus(deploymentId, deploymentStatus.inProgress);
 
     if (!bucketExists) await createBucket(s3BucketName);
