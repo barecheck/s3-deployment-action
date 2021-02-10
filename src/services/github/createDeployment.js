@@ -7,7 +7,7 @@ const {
 } = require('../../input');
 
 const createDeployment = async () => {
-  console.log({
+  const deployment = await githubClient.repos.createDeployment({
     owner: getRepositoryOwner(),
     repo: getRepositoryName(),
     ref: `refs/heads/${getBranchName()}`,
@@ -16,7 +16,9 @@ const createDeployment = async () => {
     transient_environment: true,
     required_contexts: []
   });
-  const deployment = await githubClient.repos.createDeployment({
+
+  console.log({
+    deployment,
     owner: getRepositoryOwner(),
     repo: getRepositoryName(),
     ref: `refs/heads/${getBranchName()}`,
