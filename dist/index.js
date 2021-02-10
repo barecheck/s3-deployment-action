@@ -29807,17 +29807,33 @@ function wrappy (fn, cb) {
 const createBucket = __nccwpck_require__(5583);
 const uploadFiles = __nccwpck_require__(6087);
 const isBucketExists = __nccwpck_require__(5447);
-const { getSourceDir, getS3BucketName } = __nccwpck_require__(6);
+const createDeployment = __nccwpck_require__(8510);
+const createDeploymentStatus = __nccwpck_require__(8428);
+const { deploymentStatus } = __nccwpck_require__(3547);
+const { getSourceDir, getS3BucketName, getWebsiteUrl } = __nccwpck_require__(6);
 
 const deployToS3Bucket = async () => {
   const sourceDir = getSourceDir();
   const s3BucketName = getS3BucketName();
+  const websiteUrl = getWebsiteUrl();
 
   const bucketExists = await isBucketExists(s3BucketName);
 
-  if (!bucketExists) await createBucket(s3BucketName);
+  const deploymentId = await createDeployment();
 
-  await uploadFiles(s3BucketName, sourceDir);
+  if (deploymentId) {
+    await createDeploymentStatus(deploymentId, deploymentStatus.inProgress);
+
+    if (!bucketExists) await createBucket(s3BucketName);
+
+    await uploadFiles(s3BucketName, sourceDir);
+
+    await createDeploymentStatus(
+      deploymentId,
+      deploymentStatus.success,
+      websiteUrl
+    );
+  }
 };
 
 module.exports = deployToS3Bucket;
@@ -29901,7 +29917,8 @@ const getS3BucketPrefix = () => core.getInput('s3-bucket-prefix');
 
 const getSourceDir = () => core.getInput('source-dir');
 
-const getRepositoryName = () => context.repo;
+const getRepositoryOwner = () => context.payload.repo.owner;
+const getRepositoryName = () => context.payload.repo.repo;
 
 const getBranchName = () => context.payload.pull_request.head.ref;
 const getPullRequestNumber = () => context.payload.pull_request.number;
@@ -29911,13 +29928,18 @@ const getS3BucketName = () =>
 
 const getGithubActionType = () => context.payload.action;
 
+const getWebsiteUrl = () =>
+  `http://${getS3BucketName()}.s3-website-us-east-1.amazonaws.com`;
+
 module.exports = {
   getS3BucketPrefix,
   getSourceDir,
+  getRepositoryOwner,
   getRepositoryName,
   getBranchName,
   getS3BucketName,
-  getGithubActionType
+  getGithubActionType,
+  getWebsiteUrl
 };
 
 
@@ -29931,6 +29953,87 @@ const core = __nccwpck_require__(2186);
 const info = (msg) => core.info(msg);
 
 module.exports = { info };
+
+
+/***/ }),
+
+/***/ 8510:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const githubClient = __nccwpck_require__(3166);
+const {
+  getS3BucketName,
+  getRepositoryName,
+  getRepositoryOwner,
+  getBranchName
+} = __nccwpck_require__(6);
+
+const createDeployment = async () => {
+  const deployment = await githubClient.repos.createDeployment({
+    owner: getRepositoryOwner(),
+    repo: getRepositoryName(),
+    ref: `refs/heads/${getBranchName()}`,
+    environment: getS3BucketName(),
+    auto_merge: false,
+    transient_environment: true,
+    required_contexts: []
+  });
+
+  return deployment.data ? deployment.data.id : false;
+};
+
+module.exports = createDeployment;
+
+
+/***/ }),
+
+/***/ 8428:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const githubClient = __nccwpck_require__(3166);
+
+const createDeploymentStatus = async (
+  deploymentId,
+  state,
+  environmentUrl = ''
+) => {
+  const deployment = await githubClient.repos.createDeploymentStatus({
+    deployment_id: deploymentId,
+    state,
+    environment_url: environmentUrl
+  });
+
+  return deployment;
+};
+
+module.exports = createDeploymentStatus;
+
+
+/***/ }),
+
+/***/ 3547:
+/***/ ((module) => {
+
+const deploymentStatus = {
+  inProgress: 'in_progress',
+  success: 'success`'
+};
+
+module.exports = { deploymentStatus };
+
+
+/***/ }),
+
+/***/ 3166:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const github = __nccwpck_require__(5438);
+
+const { GITHUB_TOKEN } = process.env;
+
+module.exports = github.getOctokit(GITHUB_TOKEN, {
+  previews: ['ant-man-preview', 'flash-preview']
+});
 
 
 /***/ }),

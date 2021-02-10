@@ -5,7 +5,8 @@ const getS3BucketPrefix = () => core.getInput('s3-bucket-prefix');
 
 const getSourceDir = () => core.getInput('source-dir');
 
-const getRepositoryName = () => context.repo;
+const getRepositoryOwner = () => context.payload.repo.owner;
+const getRepositoryName = () => context.payload.repo.repo;
 
 const getBranchName = () => context.payload.pull_request.head.ref;
 const getPullRequestNumber = () => context.payload.pull_request.number;
@@ -15,11 +16,16 @@ const getS3BucketName = () =>
 
 const getGithubActionType = () => context.payload.action;
 
+const getWebsiteUrl = () =>
+  `http://${getS3BucketName()}.s3-website-us-east-1.amazonaws.com`;
+
 module.exports = {
   getS3BucketPrefix,
   getSourceDir,
+  getRepositoryOwner,
   getRepositoryName,
   getBranchName,
   getS3BucketName,
-  getGithubActionType
+  getGithubActionType,
+  getWebsiteUrl
 };
