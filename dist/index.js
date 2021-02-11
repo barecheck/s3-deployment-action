@@ -29809,6 +29809,8 @@ const uploadFiles = __nccwpck_require__(6087);
 const isBucketExists = __nccwpck_require__(5447);
 const createDeployment = __nccwpck_require__(8510);
 const createDeploymentStatus = __nccwpck_require__(8428);
+const deleteDeployments = __nccwpck_require__(295);
+
 const { deploymentStatus } = __nccwpck_require__(3547);
 
 const { getSourceDir, getS3BucketName, getWebsiteUrl } = __nccwpck_require__(6);
@@ -29817,6 +29819,9 @@ const deployToS3Bucket = async () => {
   const sourceDir = getSourceDir();
   const s3BucketName = getS3BucketName();
   const websiteUrl = getWebsiteUrl();
+
+  // delete all previous deployments before creating new one
+  await deleteDeployments();
 
   const deploymentId = await createDeployment();
 
@@ -30017,6 +30022,35 @@ module.exports = createDeploymentStatus;
 
 /***/ }),
 
+/***/ 295:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const githubClient = __nccwpck_require__(3166);
+const listDeployments = __nccwpck_require__(6503);
+
+const { getRepositoryName, getRepositoryOwner } = __nccwpck_require__(6);
+
+const deleteDeployments = async () => {
+  const deployments = await listDeployments();
+
+  await Promise.all(
+    deployments.map((deployment) =>
+      githubClient.repos.deleteDeployment({
+        owner: getRepositoryOwner(),
+        repo: getRepositoryName(),
+        deployment_id: deployment.id
+      })
+    )
+  );
+
+  return true;
+};
+
+module.exports = deleteDeployments;
+
+
+/***/ }),
+
 /***/ 3547:
 /***/ ((module) => {
 
@@ -30040,6 +30074,31 @@ const { GITHUB_TOKEN } = process.env;
 module.exports = github.getOctokit(GITHUB_TOKEN, {
   previews: ['ant-man-preview', 'flash-preview']
 });
+
+
+/***/ }),
+
+/***/ 6503:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const githubClient = __nccwpck_require__(3166);
+const {
+  getRepositoryName,
+  getRepositoryOwner,
+  getBranchName
+} = __nccwpck_require__(6);
+
+const listDeployments = async () => {
+  const deployments = await githubClient.repos.listDeployments({
+    owner: getRepositoryOwner(),
+    repo: getRepositoryName(),
+    ref: `refs/heads/${getBranchName()}`
+  });
+
+  return deployments.data;
+};
+
+module.exports = listDeployments;
 
 
 /***/ }),
