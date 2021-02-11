@@ -29986,7 +29986,7 @@ const createDeployment = async () => {
     repo: getRepositoryName(),
     ref: `refs/heads/${getBranchName()}`,
     environment: getS3BucketName(),
-    auto_merge: false,
+    auto_merge: true,
     transient_environment: true,
     required_contexts: []
   });
