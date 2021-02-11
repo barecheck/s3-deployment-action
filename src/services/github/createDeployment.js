@@ -17,17 +17,6 @@ const createDeployment = async () => {
     required_contexts: []
   });
 
-  console.log({
-    deployment,
-    owner: getRepositoryOwner(),
-    repo: getRepositoryName(),
-    ref: `refs/heads/${getBranchName()}`,
-    environment: getS3BucketName(),
-    auto_merge: false,
-    transient_environment: true,
-    required_contexts: []
-  });
-
   return deployment.data ? deployment.data.id : false;
 };
 

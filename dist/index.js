@@ -29986,17 +29986,6 @@ const createDeployment = async () => {
     required_contexts: []
   });
 
-  console.log({
-    deployment,
-    owner: getRepositoryOwner(),
-    repo: getRepositoryName(),
-    ref: `refs/heads/${getBranchName()}`,
-    environment: getS3BucketName(),
-    auto_merge: false,
-    transient_environment: true,
-    required_contexts: []
-  });
-
   return deployment.data ? deployment.data.id : false;
 };
 
@@ -30009,6 +29998,7 @@ module.exports = createDeployment;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const githubClient = __nccwpck_require__(3166);
+const { getRepositoryName, getRepositoryOwner } = __nccwpck_require__(6);
 
 const createDeploymentStatus = async (
   deploymentId,
@@ -30016,6 +30006,8 @@ const createDeploymentStatus = async (
   environmentUrl = ''
 ) => {
   const deployment = await githubClient.repos.createDeploymentStatus({
+    owner: getRepositoryOwner(),
+    repo: getRepositoryName(),
     deployment_id: deploymentId,
     state,
     environment_url: environmentUrl
