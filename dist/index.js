@@ -29810,7 +29810,7 @@ const isBucketExists = __nccwpck_require__(5447);
 const createDeployment = __nccwpck_require__(8510);
 const createDeploymentStatus = __nccwpck_require__(8428);
 const { deploymentStatus } = __nccwpck_require__(3547);
-const { info } = __nccwpck_require__(4528);
+
 const { getSourceDir, getS3BucketName, getWebsiteUrl } = __nccwpck_require__(6);
 
 const deployToS3Bucket = async () => {
@@ -29822,16 +29822,12 @@ const deployToS3Bucket = async () => {
 
   if (deploymentId) {
     await createDeploymentStatus(deploymentId, deploymentStatus.inProgress);
-    try {
-      await isBucketExists(s3BucketName);
-    } catch {
-      info('creating...');
+
+    const bucketExists = await isBucketExists(s3BucketName);
+
+    if (!bucketExists) {
       await createBucket(s3BucketName);
     }
-
-    // if (!bucketExists) {
-    //   await createBucket(s3BucketName);
-    // }
 
     await uploadFiles(s3BucketName, sourceDir);
 
