@@ -29855,10 +29855,14 @@ module.exports = deployToS3Bucket;
 const isBucketExists = __nccwpck_require__(5447);
 const deleteBucket = __nccwpck_require__(5351);
 const deleteFiles = __nccwpck_require__(264);
+const deleteDeployments = __nccwpck_require__(295);
+
 const { getS3BucketName } = __nccwpck_require__(6);
 
 const removeS3Bucket = async () => {
   const s3BucketName = getS3BucketName();
+
+  await deleteDeployments();
 
   const bucketExists = await isBucketExists(s3BucketName);
 
