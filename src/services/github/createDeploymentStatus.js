@@ -6,7 +6,7 @@ const createDeploymentStatus = async (
   state,
   environmentUrl = ''
 ) => {
-  const deployment = await githubClient.repos.createDeploymentStatus({
+  const deploymentStatus = await githubClient.repos.createDeploymentStatus({
     owner: getRepositoryOwner(),
     repo: getRepositoryName(),
     deployment_id: deploymentId,
@@ -14,7 +14,7 @@ const createDeploymentStatus = async (
     environment_url: environmentUrl
   });
 
-  return deployment;
+  return deploymentStatus;
 };
 
 module.exports = createDeploymentStatus;
