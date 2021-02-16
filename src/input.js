@@ -19,6 +19,8 @@ const getGithubActionType = () => context.payload.action;
 const getWebsiteUrl = () =>
   `http://${getS3BucketName()}.s3-website-us-east-1.amazonaws.com`;
 
+const getGithubToken = () => process.env.GITHUB_TOKEN;
+
 module.exports = {
   getS3BucketPrefix,
   getSourceDir,
@@ -27,5 +29,6 @@ module.exports = {
   getBranchName,
   getS3BucketName,
   getGithubActionType,
-  getWebsiteUrl
+  getWebsiteUrl,
+  getGithubToken
 };
