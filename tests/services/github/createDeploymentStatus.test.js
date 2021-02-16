@@ -1,6 +1,7 @@
 const proxyquire = require('proxyquire').noCallThru();
 const { assert } = require('chai');
 const sinon = require('sinon');
+const { deploymentStatus } = require('../../../src/services/github/enum');
 
 const createDeploymentStatusMock = ({ githubClient, input }) =>
   proxyquire('../../../src/services/github/createDeploymentStatus', {
@@ -10,18 +11,19 @@ const createDeploymentStatusMock = ({ githubClient, input }) =>
 
 describe('services/github/createDeploymentStatus', () => {
   it('createDeploymentStatus should be called once', async () => {
-    const deploymentStatus = {
+    const deploymentStatusRes = {
       id: 4
     };
     const deploymentId = 4;
-    const state = 'success';
+    const state = deploymentStatus.success;
+
     const environmentUrl = 'https://test.com';
     const repositoryOwner = 'barecheck';
     const repositoryName = 's3-deployment';
 
     const githubClient = {
       repos: {
-        createDeploymentStatus: sinon.stub().returns(deploymentStatus)
+        createDeploymentStatus: sinon.stub().returns(deploymentStatusRes)
       }
     };
     const input = {
@@ -34,7 +36,7 @@ describe('services/github/createDeploymentStatus', () => {
       input
     });
 
-    const deploymentStatusRes = await createDeploymentStatus(
+    const res = await createDeploymentStatus(
       deploymentId,
       state,
       environmentUrl
@@ -51,6 +53,6 @@ describe('services/github/createDeploymentStatus', () => {
         environment_url: environmentUrl
       }
     ]);
-    assert.deepEqual(deploymentStatusRes, deploymentStatus);
+    assert.deepEqual(res, deploymentStatusRes);
   });
 });
