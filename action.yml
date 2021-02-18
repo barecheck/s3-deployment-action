@@ -6,9 +6,9 @@ branding:
 inputs:
   source-dir:
     description: Directory that would be deployed to S3 bucket
-    required: false
-  s3-bucket-prefix:
-    description: Prefix for all S3 buckets that would be created for preview deployments
+    required: true
+  s3-preview-bucket-prefix:
+    description: Prefix for S3 buckets that would be created for preview deployments
     required: true
 runs:
   using: 'node12'
