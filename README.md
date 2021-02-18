@@ -27,7 +27,7 @@ jobs:
 
       - name: Run deployment preview
         id: s3-preview-deployment-action
-        uses: ./
+        uses: barecheck/s3-deployment-action@v0.1-beta.1
         with:
           source-dir: ./example
           s3-bucket-prefix: barecheck
