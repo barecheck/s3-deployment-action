@@ -7,7 +7,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "aws-sdk": "^2.836.0",
-    "mime-types": "^2.1.28",
+    "mime-types": "^2.1.29",
     "recursive-readdir": "^2.2.2"
   },
   "devDependencies": {
