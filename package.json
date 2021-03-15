@@ -13,7 +13,7 @@
   "devDependencies": {
     "@vercel/ncc": "^0.26.2",
     "chai": "^4.3.4",
-    "eslint": "^7.21.0",
+    "eslint": "^7.22.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
