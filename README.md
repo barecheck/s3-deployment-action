@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14.15.0
+      - name: Use Node.js 14.16.0
         uses: actions/setup-node@v1
         with:
-          node-version: 14.15.0
+          node-version: 14.16.0
 
       # Add your build `steps here before you push all static files to S3
 
