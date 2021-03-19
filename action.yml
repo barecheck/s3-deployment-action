@@ -1,8 +1,8 @@
-name: 'AWS S3 Preview Deployment'
-description: 'GitHub Action generates code coverage reports'
+name: "AWS S3 Preview Deployment"
+description: "GitHub Action generates code coverage reports"
 branding:
-  icon: 'upload-cloud'
-  color: 'yellow'
+  icon: "upload-cloud"
+  color: "yellow"
 inputs:
   source-dir:
     description: Directory that would be deployed to S3 bucket
@@ -11,5 +11,5 @@ inputs:
     description: Prefix for S3 buckets that would be created for preview deployments
     required: true
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"

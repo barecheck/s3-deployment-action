@@ -1,16 +1,16 @@
-const proxyquire = require('proxyquire').noCallThru();
-const { assert } = require('chai');
-const sinon = require('sinon');
+const proxyquire = require("proxyquire").noCallThru();
+const { assert } = require("chai");
+const sinon = require("sinon");
 
 const deleteDeploymentsMock = ({ githubClient, listDeployments, input }) =>
-  proxyquire('../../../src/services/github/deleteDeployments', {
-    './githubClient': githubClient,
-    './listDeployments': listDeployments,
-    '../../input': input
+  proxyquire("../../../src/services/github/deleteDeployments", {
+    "./githubClient": githubClient,
+    "./listDeployments": listDeployments,
+    "../../input": input
   });
 
-describe('services/github/deleteDeployments', () => {
-  it('deleteDeployments should be called once', async () => {
+describe("services/github/deleteDeployments", () => {
+  it("deleteDeployments should be called once", async () => {
     const deploymentId = 4;
     const deleteDeploymentRes = { id: deploymentId };
     const deployments = [
@@ -18,8 +18,8 @@ describe('services/github/deleteDeployments', () => {
         id: deploymentId
       }
     ];
-    const repositoryOwner = 'barecheck';
-    const repositoryName = 's3-deployment';
+    const repositoryOwner = "barecheck";
+    const repositoryName = "s3-deployment";
 
     const input = {
       getRepositoryOwner: () => repositoryOwner,

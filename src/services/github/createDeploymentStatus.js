@@ -1,10 +1,10 @@
-const githubClient = require('./githubClient');
-const { getRepositoryName, getRepositoryOwner } = require('../../input');
+const githubClient = require("./githubClient");
+const { getRepositoryName, getRepositoryOwner } = require("../../input");
 
 const createDeploymentStatus = async (
   deploymentId,
   state,
-  environmentUrl = ''
+  environmentUrl = ""
 ) => {
   const deploymentStatus = await githubClient.repos.createDeploymentStatus({
     owner: getRepositoryOwner(),

@@ -1,10 +1,10 @@
-const githubClient = require('./githubClient');
+const githubClient = require("./githubClient");
 const {
   getS3BucketName,
   getRepositoryName,
   getRepositoryOwner,
   getBranchName
-} = require('../../input');
+} = require("../../input");
 
 const createDeployment = async () => {
   const deployment = await githubClient.repos.createDeployment({

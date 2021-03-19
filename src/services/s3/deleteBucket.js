@@ -1,5 +1,5 @@
-const s3Client = require('./s3Client');
-const { info } = require('../../logger');
+const s3Client = require("./s3Client");
+const { info } = require("../../logger");
 
 const deleteBucket = async (bucketName) => {
   info(`Deleting ${bucketName} S3 bucket...`);

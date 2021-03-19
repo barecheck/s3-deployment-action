@@ -1,4 +1,4 @@
-const { assert } = require('chai');
+const { assert } = require("chai");
 
 const expectThrowsAsync = async (method, errorMessage) => {
   let error = null;
@@ -7,7 +7,7 @@ const expectThrowsAsync = async (method, errorMessage) => {
   } catch (err) {
     error = err;
   }
-  assert.instanceOf('Error');
+  assert.instanceOf("Error");
   if (errorMessage) {
     assert.equal(error.message, errorMessage);
   }

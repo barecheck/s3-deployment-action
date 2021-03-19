@@ -1,23 +1,23 @@
-const proxyquire = require('proxyquire').noCallThru();
-const { assert } = require('chai');
-const sinon = require('sinon');
+const proxyquire = require("proxyquire").noCallThru();
+const { assert } = require("chai");
+const sinon = require("sinon");
 
-const loggerMock = require('../../mocks/logger');
-const { expectThrowsAsync } = require('../../utils');
+const loggerMock = require("../../mocks/logger");
+const { expectThrowsAsync } = require("../../utils");
 
 const putObjectMock = ({ s3Client, readFileSync, mimeTypes }) =>
-  proxyquire('../../../src/services/s3/putObject', {
+  proxyquire("../../../src/services/s3/putObject", {
     fs: { readFileSync },
-    'mime-types': mimeTypes,
-    './s3Client': s3Client,
-    '../../logger': loggerMock
+    "mime-types": mimeTypes,
+    "./s3Client": s3Client,
+    "../../logger": loggerMock
   });
 
-describe('services/s3/putObject', () => {
-  it('putObject should be called once', async () => {
-    const bucketName = 'test';
-    const s3Key = 's3KeyTest';
-    const filePath = 'filePathTest';
+describe("services/s3/putObject", () => {
+  it("putObject should be called once", async () => {
+    const bucketName = "test";
+    const s3Key = "s3KeyTest";
+    const filePath = "filePathTest";
     const readFileSyncRes = { test: 1 };
     const lookupRes = { test: 2 };
     const putObjectRes = { test: 3 };
@@ -41,17 +41,17 @@ describe('services/s3/putObject', () => {
         Bucket: bucketName,
         Key: s3Key,
         Body: readFileSyncRes,
-        ACL: 'public-read',
-        ServerSideEncryption: 'AES256',
+        ACL: "public-read",
+        ServerSideEncryption: "AES256",
         ContentType: lookupRes
       }
     ]);
   });
 
-  it('readFileSync and lookup should be called once', async () => {
-    const bucketName = 'test';
-    const s3Key = 's3KeyTest';
-    const filePath = 'filePathTest';
+  it("readFileSync and lookup should be called once", async () => {
+    const bucketName = "test";
+    const s3Key = "s3KeyTest";
+    const filePath = "filePathTest";
     const readFileSyncRes = { test: 1 };
     const lookupRes = { test: 2 };
     const putObjectRes = { test: 3 };
@@ -75,10 +75,10 @@ describe('services/s3/putObject', () => {
     assert.deepEqual(mimeTypes.lookup.firstCall.args, [filePath]);
   });
 
-  it('putObject should be called with application/octet-stream', async () => {
-    const bucketName = 'test';
-    const s3Key = 's3KeyTest';
-    const filePath = 'filePathTest';
+  it("putObject should be called with application/octet-stream", async () => {
+    const bucketName = "test";
+    const s3Key = "s3KeyTest";
+    const filePath = "filePathTest";
     const readFileSyncRes = { test: 1 };
     const putObjectRes = { test: 3 };
 
@@ -99,20 +99,20 @@ describe('services/s3/putObject', () => {
         Bucket: bucketName,
         Key: s3Key,
         Body: readFileSyncRes,
-        ACL: 'public-read',
-        ServerSideEncryption: 'AES256',
-        ContentType: 'application/octet-stream'
+        ACL: "public-read",
+        ServerSideEncryption: "AES256",
+        ContentType: "application/octet-stream"
       }
     ]);
   });
 
-  it('should throw error once something goes wrong', async () => {
-    const bucketName = 'test';
-    const s3Key = 's3KeyTest';
-    const filePath = 'filePathTest';
+  it("should throw error once something goes wrong", async () => {
+    const bucketName = "test";
+    const s3Key = "s3KeyTest";
+    const filePath = "filePathTest";
     const readFileSyncRes = { test: 1 };
     const lookupRes = { test: 2 };
-    const expectedError = 'something goes wrong';
+    const expectedError = "something goes wrong";
 
     const readFileSync = sinon.stub().returns(readFileSyncRes);
     const mimeTypes = { lookup: sinon.stub().returns(lookupRes) };
