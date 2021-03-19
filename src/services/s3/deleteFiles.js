@@ -1,10 +1,10 @@
-const s3Client = require('./s3Client');
-const { info } = require('../../logger');
+const s3Client = require("./s3Client");
+const { info } = require("../../logger");
 
 const deleteFiles = async (bucketName) => {
   info(`Deleting all files from ${bucketName}`);
 
-  info('Fetching objects...');
+  info("Fetching objects...");
   const objects = await s3Client
     .listObjectsV2({ Bucket: bucketName })
     .promise();
@@ -19,7 +19,7 @@ const deleteFiles = async (bucketName) => {
       }
     };
 
-    info('Deleting objects...');
+    info("Deleting objects...");
     await s3Client.deleteObjects(deleteParams).promise();
   }
 };

@@ -1,18 +1,18 @@
-const proxyquire = require('proxyquire').noCallThru();
-const { assert } = require('chai');
-const sinon = require('sinon');
+const proxyquire = require("proxyquire").noCallThru();
+const { assert } = require("chai");
+const sinon = require("sinon");
 
-const loggerMock = require('../../mocks/logger');
+const loggerMock = require("../../mocks/logger");
 
 const deleteFilesMock = ({ s3Client }) =>
-  proxyquire('../../../src/services/s3/deleteFiles', {
-    './s3Client': s3Client,
-    '../../logger': loggerMock
+  proxyquire("../../../src/services/s3/deleteFiles", {
+    "./s3Client": s3Client,
+    "../../logger": loggerMock
   });
 
-describe('services/s3/deleteFiles', () => {
-  it('listObjectsV2 should be called once', async () => {
-    const bucketName = 'test';
+describe("services/s3/deleteFiles", () => {
+  it("listObjectsV2 should be called once", async () => {
+    const bucketName = "test";
     const s3BucketObjects = {
       Contents: []
     };
@@ -34,10 +34,10 @@ describe('services/s3/deleteFiles', () => {
     ]);
   });
 
-  it('deleteObjects should be called once with ', async () => {
-    const bucketName = 'test';
+  it("deleteObjects should be called once with ", async () => {
+    const bucketName = "test";
     const s3BucketObjects = {
-      Contents: [{ Key: 'test.txt' }]
+      Contents: [{ Key: "test.txt" }]
     };
     const listObjectsV2Promise = sinon.stub().returns(s3BucketObjects);
     const s3Client = {
@@ -56,7 +56,7 @@ describe('services/s3/deleteFiles', () => {
       {
         Bucket: bucketName,
         Delete: {
-          Objects: [{ Key: 'test.txt' }]
+          Objects: [{ Key: "test.txt" }]
         }
       }
     ]);

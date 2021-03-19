@@ -1,9 +1,9 @@
-const { context } = require('@actions/github');
-const core = require('@actions/core');
+const { context } = require("@actions/github");
+const core = require("@actions/core");
 
-const getS3BucketPrefix = () => core.getInput('s3-bucket-prefix');
+const getS3BucketPrefix = () => core.getInput("s3-bucket-prefix");
 
-const getSourceDir = () => core.getInput('source-dir');
+const getSourceDir = () => core.getInput("source-dir");
 
 const getRepositoryOwner = () => context.repo.owner;
 const getRepositoryName = () => context.repo.repo;

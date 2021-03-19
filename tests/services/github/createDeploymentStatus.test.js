@@ -1,25 +1,25 @@
-const proxyquire = require('proxyquire').noCallThru();
-const { assert } = require('chai');
-const sinon = require('sinon');
-const { deploymentStatus } = require('../../../src/services/github/enum');
+const proxyquire = require("proxyquire").noCallThru();
+const { assert } = require("chai");
+const sinon = require("sinon");
+const { deploymentStatus } = require("../../../src/services/github/enum");
 
 const createDeploymentStatusMock = ({ githubClient, input }) =>
-  proxyquire('../../../src/services/github/createDeploymentStatus', {
-    './githubClient': githubClient,
-    '../../input': input
+  proxyquire("../../../src/services/github/createDeploymentStatus", {
+    "./githubClient": githubClient,
+    "../../input": input
   });
 
-describe('services/github/createDeploymentStatus', () => {
-  it('createDeploymentStatus should be called once', async () => {
+describe("services/github/createDeploymentStatus", () => {
+  it("createDeploymentStatus should be called once", async () => {
     const deploymentStatusRes = {
       id: 4
     };
     const deploymentId = 4;
     const state = deploymentStatus.success;
 
-    const environmentUrl = 'https://test.com';
-    const repositoryOwner = 'barecheck';
-    const repositoryName = 's3-deployment';
+    const environmentUrl = "https://test.com";
+    const repositoryOwner = "barecheck";
+    const repositoryName = "s3-deployment";
 
     const githubClient = {
       repos: {

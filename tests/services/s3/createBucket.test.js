@@ -1,18 +1,18 @@
-const proxyquire = require('proxyquire').noCallThru();
-const { assert } = require('chai');
-const sinon = require('sinon');
+const proxyquire = require("proxyquire").noCallThru();
+const { assert } = require("chai");
+const sinon = require("sinon");
 
-const loggerMock = require('../../mocks/logger');
+const loggerMock = require("../../mocks/logger");
 
 const createBucketMock = ({ s3Client }) =>
-  proxyquire('../../../src/services/s3/createBucket', {
-    './s3Client': s3Client,
-    '../../logger': loggerMock
+  proxyquire("../../../src/services/s3/createBucket", {
+    "./s3Client": s3Client,
+    "../../logger": loggerMock
   });
 
-describe('services/s3/createBucket', () => {
-  it('createBucket and putBucketWebsite should be called once', async () => {
-    const bucketName = 'test';
+describe("services/s3/createBucket", () => {
+  it("createBucket and putBucketWebsite should be called once", async () => {
+    const bucketName = "test";
     const promise = sinon.spy();
     const s3Client = {
       createBucket: sinon.stub().returns({ promise }),
@@ -33,8 +33,8 @@ describe('services/s3/createBucket', () => {
       {
         Bucket: bucketName,
         WebsiteConfiguration: {
-          IndexDocument: { Suffix: 'index.html' },
-          ErrorDocument: { Key: 'index.html' }
+          IndexDocument: { Suffix: "index.html" },
+          ErrorDocument: { Key: "index.html" }
         }
       }
     ]);
