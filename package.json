@@ -1,6 +1,6 @@
 {
   "name": "s3-preview-deployment-action",
-  "version": "0.2.0",
+  "version": "v0.1-beta.1",
   "description": "Github Action to create preview deployment on AWS S3 to view your changes",
   "main": "src/index.js",
   "dependencies": {
