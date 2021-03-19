@@ -1,7 +1,7 @@
-const githubClient = require('./githubClient');
-const listDeployments = require('./listDeployments');
+const githubClient = require("./githubClient");
+const listDeployments = require("./listDeployments");
 
-const { getRepositoryName, getRepositoryOwner } = require('../../input');
+const { getRepositoryName, getRepositoryOwner } = require("../../input");
 
 const deleteDeployments = async () => {
   const deployments = await listDeployments();

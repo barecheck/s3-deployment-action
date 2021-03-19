@@ -1,13 +1,13 @@
-const createBucket = require('../services/s3/createBucket');
-const uploadFiles = require('../services/s3/uploadFiles');
-const isBucketExists = require('../services/s3/isBucketExists');
-const createDeployment = require('../services/github/createDeployment');
-const createDeploymentStatus = require('../services/github/createDeploymentStatus');
-const deleteDeployments = require('../services/github/deleteDeployments');
+const createBucket = require("../services/s3/createBucket");
+const uploadFiles = require("../services/s3/uploadFiles");
+const isBucketExists = require("../services/s3/isBucketExists");
+const createDeployment = require("../services/github/createDeployment");
+const createDeploymentStatus = require("../services/github/createDeploymentStatus");
+const deleteDeployments = require("../services/github/deleteDeployments");
 
-const { deploymentStatus } = require('../services/github/enum');
+const { deploymentStatus } = require("../services/github/enum");
 
-const { getSourceDir, getS3BucketName, getWebsiteUrl } = require('../input');
+const { getSourceDir, getS3BucketName, getWebsiteUrl } = require("../input");
 
 const deployToS3Bucket = async () => {
   const sourceDir = getSourceDir();

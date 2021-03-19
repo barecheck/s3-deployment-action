@@ -1,2 +1,2 @@
 module.exports = (filePath) =>
-  filePath.replace(/^(\\|\/)+/g, '').replace(/\\/g, '/');
+  filePath.replace(/^(\\|\/)+/g, "").replace(/\\/g, "/");

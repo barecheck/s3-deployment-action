@@ -1,5 +1,5 @@
-const s3Client = require('./s3Client');
-const { info } = require('../../logger');
+const s3Client = require("./s3Client");
+const { info } = require("../../logger");
 
 const isBucketExists = async (bucketName) => {
   info(`Checking if bucket ${bucketName} exists...`);

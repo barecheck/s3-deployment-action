@@ -1,22 +1,22 @@
-const proxyquire = require('proxyquire').noCallThru();
-const { assert } = require('chai');
-const sinon = require('sinon');
+const proxyquire = require("proxyquire").noCallThru();
+const { assert } = require("chai");
+const sinon = require("sinon");
 
 const createDeploymentMock = ({ githubClient, input }) =>
-  proxyquire('../../../src/services/github/createDeployment', {
-    './githubClient': githubClient,
-    '../../input': input
+  proxyquire("../../../src/services/github/createDeployment", {
+    "./githubClient": githubClient,
+    "../../input": input
   });
 
-describe('services/github/createDeployment', () => {
-  it('createDeployment should be called once', async () => {
+describe("services/github/createDeployment", () => {
+  it("createDeployment should be called once", async () => {
     const deployment = {
       data: { id: 2 }
     };
-    const repositoryOwner = 'barecheck';
-    const repositoryName = 's3-deployment';
-    const branchName = 'test';
-    const s3BucketName = 'some-bcuket';
+    const repositoryOwner = "barecheck";
+    const repositoryName = "s3-deployment";
+    const branchName = "test";
+    const s3BucketName = "some-bcuket";
 
     const githubClient = {
       repos: {
@@ -50,12 +50,12 @@ describe('services/github/createDeployment', () => {
     assert.deepEqual(deploymentId, deployment.data.id);
   });
 
-  it('should return false once deployemnt is not created', async () => {
+  it("should return false once deployemnt is not created", async () => {
     const deployment = {};
-    const repositoryOwner = 'barecheck';
-    const repositoryName = 's3-deployment';
-    const branchName = 'test';
-    const s3BucketName = 'some-bcuket';
+    const repositoryOwner = "barecheck";
+    const repositoryName = "s3-deployment";
+    const branchName = "test";
+    const s3BucketName = "some-bcuket";
 
     const githubClient = {
       repos: {

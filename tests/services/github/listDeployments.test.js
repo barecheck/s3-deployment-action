@@ -1,15 +1,15 @@
-const proxyquire = require('proxyquire').noCallThru();
-const { assert } = require('chai');
-const sinon = require('sinon');
+const proxyquire = require("proxyquire").noCallThru();
+const { assert } = require("chai");
+const sinon = require("sinon");
 
 const listDeploymentsMock = ({ githubClient, input }) =>
-  proxyquire('../../../src/services/github/listDeployments', {
-    './githubClient': githubClient,
-    '../../input': input
+  proxyquire("../../../src/services/github/listDeployments", {
+    "./githubClient": githubClient,
+    "../../input": input
   });
 
-describe('services/github/listDeployments', () => {
-  it('listDeployments should be called once', async () => {
+describe("services/github/listDeployments", () => {
+  it("listDeployments should be called once", async () => {
     const deployments = {
       data: [
         {
@@ -17,9 +17,9 @@ describe('services/github/listDeployments', () => {
         }
       ]
     };
-    const repositoryOwner = 'barecheck';
-    const repositoryName = 's3-deployment';
-    const branchName = 'test-branch';
+    const repositoryOwner = "barecheck";
+    const repositoryName = "s3-deployment";
+    const branchName = "test-branch";
 
     const githubClient = {
       repos: {

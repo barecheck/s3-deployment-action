@@ -1,9 +1,9 @@
-const githubClient = require('./githubClient');
+const githubClient = require("./githubClient");
 const {
   getRepositoryName,
   getRepositoryOwner,
   getBranchName
-} = require('../../input');
+} = require("../../input");
 
 const listDeployments = async () => {
   const deployments = await githubClient.repos.listDeployments({

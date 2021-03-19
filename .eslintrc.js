@@ -1,12 +1,12 @@
 module.exports = {
-  extends: ['airbnb-base', 'prettier'],
-  plugins: ['prettier'],
+  extends: ["airbnb-base", "prettier"],
+  plugins: ["prettier"],
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly"
   },
   rules: {
-    'prettier/prettier': 'error'
+    "prettier/prettier": "error"
   },
   env: {
     commonjs: true,
