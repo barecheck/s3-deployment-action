@@ -4,9 +4,9 @@
   "description": "Github Action to create preview deployment on AWS S3 to view your changes",
   "main": "src/index.js",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.2.7",
     "@actions/github": "^4.0.0",
-    "aws-sdk": "^2.868.0",
+    "aws-sdk": "^2.888.0",
     "mime-types": "^2.1.30",
     "recursive-readdir": "^2.2.2"
   },
