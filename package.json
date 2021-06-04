@@ -6,7 +6,7 @@
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/github": "^4.0.0",
-    "aws-sdk": "^2.908.0",
+    "aws-sdk": "^2.921.0",
     "mime-types": "^2.1.30",
     "recursive-readdir": "^2.2.2"
   },
